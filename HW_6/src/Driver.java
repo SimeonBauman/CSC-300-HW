@@ -14,7 +14,7 @@ public class Driver {
 	static int [] randIntArr(int size) {
 		int[] ar = new int[size];
 		for(int i = 0; i < size; i++) {
-			ar[i] = (int)(Math.random() * 10000);
+			ar[i] = (int)(Math.random() * 1000000);
 		}
 		return ar;
 	}
