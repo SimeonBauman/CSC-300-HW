@@ -1,12 +1,15 @@
+import java.util.Arrays;
 
 public class Driver {
 
 	public static void main(String[] args){
 		
 		int[] ar = Driver.randIntArr(100000);
+		int[] ar2 = ar.clone();
+		Driver.bubbleSort(ar2);
+		Driver.insertionSort(ar);
 		
-		Driver.bubbleSort(ar);
-		Driver.selectionSort(ar);
+		
 		
 		
 	}
@@ -38,6 +41,7 @@ public class Driver {
 		
 		
 	}
+	
 	//Selection sort function
 	static void selectionSort(int[] ar) {
 		long startTime = System.currentTimeMillis();
@@ -57,4 +61,24 @@ public class Driver {
 		System.out.println("it took " + (finish - startTime) +"ms to sort " + ar.length + " numbers with selection sort");
 		
 	}
+
+	//Insertion sort function
+	static void insertionSort(int[] ar) {
+		long startTime = System.currentTimeMillis();
+		for (int i = 1; i < ar.length; i++) {
+	         int j = i;
+	         while (j > 0 && ar[j] < ar[j - 1]) {
+	            
+	            int temp = ar[j];
+	            ar[j] = ar[j - 1];
+	            ar[j - 1] = temp;
+	            j--;
+	         }
+	      }
+		long finish = System.currentTimeMillis();
+		System.out.println("it took " + (finish - startTime) +"ms to sort " + ar.length + " numbers with insertion sort");
+
+	}
 }
+
+
