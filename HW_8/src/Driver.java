@@ -14,10 +14,13 @@ public class Driver {
 				System.out.println("it took " + (finish - startTime) +"ms to sort " + ar.length + " numbers with quick sort");
 			}
 			else {
+				int[] gapValues = getGap(ar2.length);
+				
 				long startTime = System.currentTimeMillis();
-				Driver.mergeSort(ar2, 0, ar.length-1);
+				
+				Driver.shellSort(ar2,gapValues);
 				long finish = System.currentTimeMillis();
-				System.out.println("it took " + (finish - startTime) +"ms to sort " + ar.length + " numbers with merge sort");
+				System.out.println("it took " + (finish - startTime) +"ms to sort " + ar.length + " numbers with shell sort");
 			}
 		}
 		
@@ -45,57 +48,6 @@ public class Driver {
 		   quickSort(nums, n + 1, end);
 		   
 		}
-	
-	public static void mergeSort(int[] nums, int i, int k) {
-	      int j = 0;
-	      
-	      if (i < k) {
-	         j = (i + k) / 2;  
-	         
-	         mergeSort(nums, i, j);
-	         mergeSort(nums, j + 1, k);
-	            
-	         merge(nums, i, j, k);
-	      }
-	}
-	
-	private static void merge(int[] numbers, int i, int j, int k) {
-	      int mergedSize = k - i + 1;                
-	      int[] mergedNumbers = new int[mergedSize]; 
-	                                                 
-	      int mergePos = 0;                          
-	      int leftPos = i;                           
-	      int rightPos = j + 1;                      
-	      
-	     
-	      while (leftPos <= j && rightPos <= k) {
-	         if (numbers[leftPos] <= numbers[rightPos]) {
-	            mergedNumbers[mergePos] = numbers[leftPos];
-	            leftPos++;
-	         }
-	         else {
-	            mergedNumbers[mergePos] = numbers[rightPos];
-	            rightPos++;
-	         }
-	         mergePos++;
-	      }
-	      
-	      while (leftPos <= j) {
-	         mergedNumbers[mergePos] = numbers[leftPos];
-	         leftPos++;
-	         mergePos++;
-	      }
-	   
-	      while (rightPos <= k) {
-	         mergedNumbers[mergePos] = numbers[rightPos];
-	         rightPos++;
-	         mergePos++;
-	      }
-	   
-	      for (mergePos = 0; mergePos < mergedSize; mergePos++) {
-	         numbers[i + mergePos] = mergedNumbers[mergePos];
-	      }
-	   }
 	
 	public static int partition(int[] nums, int start, int end) {
 		   int mid = start + (end - start) / 2;
@@ -125,5 +77,51 @@ public class Driver {
 
 		   return high;
 		}
+	
+	public static int insertionSortInterleaved(int[] numbers, int startIndex, int gap) {
+	      int swaps = 0;
+	      for (int i = startIndex + gap; i < numbers.length; i += gap) {
+	         int j = i;
+	         while (j - gap >= startIndex && numbers[j] < numbers[j - gap]) {
+	            swaps++;
+	            // Swap numbers[j] and numbers [j - 1]
+	            int temp = numbers[j];
+	            numbers[j] = numbers[j - gap];
+	            numbers[j - gap] = temp;
+	            j -= gap;
+	         }
+	      }
+	      return swaps;
+	   }
+	   
+	public static int[] getGap(int num) {
+		int[] gaps = new int[(num)-1];
+		int current;
+		if(num%2!=0) current = num-1;
+		else current = num;
+		current/=2;
+		int index = 0;
+		while(current > 1) {
+			gaps[index] = current;
+			current/=2;
+			index++;
+		}
+		gaps[index] = 1;
+		return gaps;
+	}
+	
+	public static int shellSort(int[] numbers, int[] gapValues) {
+		      int totalSwaps = 0;
+		      for (int g = 0; g < gapValues.length; g++) {
+		         int swapsForGap = 0;
+		         for (int i = 0; i < gapValues[g]; i++) {
+		            swapsForGap += insertionSortInterleaved(numbers, i, gapValues[g]);
+		         }
+		        
+		         totalSwaps += swapsForGap;
+		      }
+		      return totalSwaps;
+		   }
+
 	
 }
